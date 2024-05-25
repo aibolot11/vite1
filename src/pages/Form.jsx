@@ -1,26 +1,39 @@
+import axios from 'axios'
 import React from 'react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function Form() {
+ const [title, setTitle] = useState('')
+  const [body, setBody] = useState('');
 
-  const [form, setForm] = useState('')
-  const [block, setBlock] = useState([])
-console.log(form);
+  const request = async ()=> {
+
+    const response = await axios.post('https://dummyjson.com/posts/add', {
+      title: title,
+      body:body,
+      userId: 5
+    })
+  }
+
+ const navigate = useNavigate()
+  
 
   const click = (element)=> {
     element.preventDefault()
-    setBlock([form, ...block])
+    request()
+    navigate('/posts')
+
+    
   }
 
   return (
     <div>
       <form>
-        <input type="text" placeholder='Write post' onInput={e => {setForm(e.target.value)}} />
+        <input type="text" placeholder='Write title' onInput={e => {setTitle(e.target.value)}} />
+        <input type='text' placeholder='write body' onInput={e => {setBody(e.target.value)}}/>
         <button onClick={click}>Send</button>
       </form>
-      <h2>
-        {block.map((e, index) => <div key={index}>{e}</div>)}
-      </h2>
     </div>
   )
 }
